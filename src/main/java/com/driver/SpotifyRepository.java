@@ -154,6 +154,7 @@ public class SpotifyRepository {
                 userPlaylistMap.put(user,plays);
             }
             return playlist;
+        }
     }
 
     public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
@@ -195,6 +196,7 @@ public class SpotifyRepository {
                 userPlaylistMap.put(user,plays);
             }
             return playlist;
+        }
     }
 
     public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
@@ -321,6 +323,7 @@ public class SpotifyRepository {
             artists.add(artist);
 
             return song;
+        }
     }
 
     public String mostPopularArtist() {
