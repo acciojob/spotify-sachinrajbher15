@@ -57,9 +57,9 @@ public class SpotifyRepository {
         Artist artist1 = null;
         
         //search for the artist
-        for(Artist artist:artists){
-            if(artist.getName()==artistName){
-                artist1=artist; //if found assign and
+        for(Artist artist : artists){
+            if(artist.getName() == artistName){
+                artist1 = artist; //if found assign and
                 break; //break the loop
             }
         }
@@ -89,9 +89,9 @@ public class SpotifyRepository {
         Album album = null;
         
         //search for the song
-        for(Album album1:albums){
-            if(album1.getTitle()==albumName){
-                album=album1;
+        for(Album album1 : albums){
+            if(album1.getTitle() == albumName){
+                album = album1;
                 break;
             }
         }
@@ -123,55 +123,45 @@ public class SpotifyRepository {
     }
 
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
-
-        //Create a playlist with given title and add all songs having the given length in the database to that playlist
-        //The creater of the playlist will be the given user and will also be the only listener at the time of playlist creation
-        //If the user does not exist, throw "User does not exist" exception
-
         User user = null;
-        for(User user1:users){
-            if(user1.getMobile()==mobile){
-                user=user1;
+        for(User user1 : users){
+            if(user1.getMobile() == mobile){
+                user = user1;
                 break;
             }
         }
-        if(user==null)
+        if(user==null){
             throw new Exception("User does not exist");
-        else {
-            Playlist playlist = new Playlist();
-            playlist.setTitle(title);
-            playlists.add(playlist);
-
-            List<Song> l = new ArrayList<>();
-            for(Song song:songs){
-                if(song.getLength()==length){
-                    l.add(song);
-                }
-            }
-            playlistSongMap.put(playlist,l);
-
-            List<User> list = new ArrayList<>();
-            list.add(user);
-            playlistListenerMap.put(playlist,list);
-
-            creatorPlaylistMap.put(user,playlist);
-
-//            List<Playlist> userPlayList = userPlaylistMap.get(user);  //error possibility
-//            userPlayList.add(playlist);
-//            userPlaylistMap.put(user,userPlayList);
-
-            if(userPlaylistMap.containsKey(user)){
-                List<Playlist> userPlayList = userPlaylistMap.get(user);
-                userPlayList.add(playlist);
-                userPlaylistMap.put(user,userPlayList);
-            }else{
-                List<Playlist> plays = new ArrayList<>();
-                plays.add(playlist);
-                userPlaylistMap.put(user,plays);
-            }
-
-            return playlist;
         }
+        Playlist playlist = new Playlist();
+        playlist.setTitle(title);
+        playlists.add(playlist);
+
+        List<Song> songsWithLength = new ArrayList<>();
+        for(Song song : songs){
+            if(song.getLength() == length){
+                songsWithLength.add(song);
+            }
+        }        
+        playlistSongMap.put(playlist, songsWithLength);
+
+        List<User> initialListeners = new ArrayList<>();
+        initialListeners.add(user);
+        playlistListenerMap.put(playlist, initialListeners);
+        
+        creatorPlaylistMap.put(user, playlist);
+        if(userPlaylistMap.containsKey(user)){
+            List<Playlist> userPlayList = userPlaylistMap.get(user);
+            userPlayList.add(playlist);
+            userPlaylistMap.put(user,userPlayList);
+        }
+        else{
+            List<Playlist> plays = new ArrayList<>();
+            plays.add(playlist);
+            userPlaylistMap.put(user,plays);
+        }
+
+        return playlist;
     }
 
     public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
