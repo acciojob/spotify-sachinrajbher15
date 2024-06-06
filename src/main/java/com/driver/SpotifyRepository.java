@@ -42,7 +42,6 @@ public class SpotifyRepository {
         user.setName(name);
         user.setMobile(mobile);
         users.add(user);
-
         return user;
     }
 
@@ -50,52 +49,34 @@ public class SpotifyRepository {
         Artist artist = new Artist();
         artist.setName(name);
         artist.setLikes(0);
-
         artists.add(artist);
         return artist;
     }
 
     public Album createAlbum(String title, String artistName) {
         Artist artist1 = null;
-
+        //search for the artist
         for(Artist artist:artists){
             if(artist.getName()==artistName){
-                artist1=artist;
-                break;
+                artist1=artist; //if found assign and
+                break; //break the loop
             }
         }
-        if(artist1==null){
+        // If the artist is not found, create a new one
+        if (artist1 == null) {
             artist1 = createArtist(artistName);
-
-            Album album = new Album();
-
-            album.setTitle(title);
-            album.setReleaseDate(new Date());
-
-            albums.add(album);
-
-            List<Album> l = new ArrayList<>();
-            l.add(album);
-            artistAlbumMap.put(artist1,l);
-
-            return album;
-        }else {
-            Album album = new Album();
-
-            album.setTitle(title);
-            album.setReleaseDate(new Date());
-
-            albums.add(album);
-
-            List<Album> l = artistAlbumMap.get(artist1);
-            if(l == null){
-                l = new ArrayList<>();
-            }
-            l.add(album);
-            artistAlbumMap.put(artist1,l);
-
-            return album;
         }
+        // Create and initialize the new album
+        Album album = new Album();
+        album.setTitle(title);
+        album.setReleaseDate(new Date());
+        // Add the new album to the albums list
+        albums.add(album);
+        // Get the current list of albums for the artist or create a new list if none exists
+        List<Album> albumList = artistAlbumMap.getOrDefault(artist1, new ArrayList<>());
+        albumList.add(album);
+        artistAlbumMap.put(artist1, albumList);
+        return album;
     }
 
     public Song createSong(String title, String albumName, int length) throws Exception{
