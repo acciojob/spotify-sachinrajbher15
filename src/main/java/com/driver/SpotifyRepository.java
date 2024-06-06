@@ -352,7 +352,7 @@ public class SpotifyRepository {
         Song mostPopularSong = null;
 
         for(Song song : songLikeMap.keySet()) {
-            if(song.getLikes() >= max){
+            if(song.getLikes() >= maxLikes){
                 mostPopularSong = song;
                 maxLikes = song.getLikes();
             }
